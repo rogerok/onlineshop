@@ -1,32 +1,31 @@
 import React, { useState, useReducer } from "react";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import { signInWithGoogle } from "./../../firbase/firebase.utils";
+import { auth, signInWithGoogle } from "./../../firbase/firebase.utils";
 import "./sign-in.style.scss";
 
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.name]: event.value,
-  };
-};
-
 const SignIn = () => {
-  const [formData, setFormData] = useReducer(formReducer, {});
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+
+    try {
+      await auth.signInWithEmailAndPassword(formData.email, formData.password);
+      console.log(formData);
+      setFormData({ email: "", password: "" });
+    } catch (err) {
+      console.log(err);
+    }
 
     setTimeout(() => setSubmitting(false), 3000);
   };
 
   const handleChange = (e) => {
-    setFormData({
-      name: e.target.name,
-      value: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   return (
