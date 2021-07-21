@@ -1,11 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { auth } from "./../../firbase/firebase.utils";
+import { connect } from "react-redux";
+
+import { ReactComponent as Logo } from "../../assets/logo.svg";
+
+import CartIcon from "../cart-icon/cart-icon.component";
 
 import "./header.style.scss";
+import CartDropdown from "./../cart-dropdown/cart-dropdown.component";
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, hidden }) => {
   return (
     <header className="header">
       <Link
@@ -32,9 +37,15 @@ const Header = ({ currentUser }) => {
             sign in
           </Link>
         )}
+        <CartIcon />
       </nav>
+      {hidden ? null : <CartDropdown />}
     </header>
   );
 };
 
-export default Header;
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => {
+  return { currentUser, hidden };
+};
+
+export default connect(mapStateToProps)(Header);

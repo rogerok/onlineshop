@@ -89,7 +89,7 @@ const SignUp = () => {
           required
           handleChange={handleChange}
         />
-        <CustomButton type="submit">Sign In</CustomButton>
+        <CustomButton type="submit">Sign Up</CustomButton>
       </form>
     </div>
   );
