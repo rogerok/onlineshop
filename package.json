@@ -39,6 +39,7 @@
     "axios": "^0.21.1",
     "firebase": "^8.7.0",
     "node-sass": "^6.0.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "reselect": "^4.0.0"
   }
 }
