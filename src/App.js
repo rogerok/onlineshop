@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
 import { connect } from "react-redux";
+
 import { auth, createUserProfileDocument } from "./firbase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
 
+import { createStructuredSelector } from "reselect";
+import { selectCurrentUser } from "./redux/user/user.selectors";
+
 import HomePage from "./pages/homepage/homepage.component";
+import SingInAndSignUp from "./pages/sing-in-and-sing-up/sing-in-and-sing-up.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
+
 import Shop from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
-import SingInAndSignUp from "./pages/sing-in-and-sing-up/sing-in-and-sing-up.component";
 
 import "./App.css";
 
@@ -46,17 +53,16 @@ function App({ currentUser, setCurrentUser }) {
               currentUser ? <Redirect to="/" /> : <SingInAndSignUp />
             }
           />
+          <Route exact path="/checkout" component={CheckoutPage} />
         </React.Fragment>
       </Switch>
     </BrowserRouter>
   );
 }
 
-const mapStateToProps = ({ user }) => {
-  return {
-    currentUser: user.currentUser,
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
 
 const mapDispatchToProps = (dispatch) => {
   return {
