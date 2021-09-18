@@ -12,38 +12,34 @@ import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "./../cart-dropdown/cart-dropdown.component";
 
 import "./header.style.scss";
+import {
+  HeaderContainer,
+  LogoContainer,
+  OptionLink,
+  OptionsContainer,
+} from "./header.styles";
 
 const Header = ({ currentUser, hidden }) => {
   return (
-    <header className="header">
-      <Link
-        className="logo-container"
-        to="/"
-        style={{ width: "50px", height: "39px" }}
-      >
+    <HeaderContainer>
+      <LogoContainer to="/" style={{ width: "50px", height: "39px" }}>
         <Logo />
-      </Link>
+      </LogoContainer>
 
-      <nav className="options">
-        <Link className="option" to="/shop">
-          shop
-        </Link>
-        <Link className="option" to="/contact">
-          contact
-        </Link>
+      <OptionsContainer>
+        <OptionLink to="/shop">shop</OptionLink>
+        <OptionLink to="/contact">contact</OptionLink>
         {currentUser ? (
-          <div className="option" onClick={() => auth.signOut()}>
+          <OptionLink as="div" onClick={() => auth.signOut()}>
             sign out
-          </div>
+          </OptionLink>
         ) : (
-          <Link className="option" to="/sign-in">
-            sign in
-          </Link>
+          <OptionLink to="/sign-in">sign in</OptionLink>
         )}
         <CartIcon />
-      </nav>
+      </OptionsContainer>
       {hidden ? null : <CartDropdown />}
-    </header>
+    </HeaderContainer>
   );
 };
 

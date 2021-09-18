@@ -1,17 +1,60 @@
-import React from "react";
-import SHOP_DATA from "./shop.data";
-import CollectionPreview from "../../components/collection-preview/collection-preview.component";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { Route } from "react-router-dom";
 
-const Shop = () => {
-  const shopData = SHOP_DATA;
+import {
+  firestore,
+  convertCollectionsSnapshotToMap,
+} from "../../firbase/firebase.utils";
+
+import { addCollection } from "./../../redux/shop/shop.action";
+
+import CollectionOverview from "./../../components/collection-overview/collection-overview.component";
+import CollectionPage from "./../collection/collection.component";
+import WithSpinner from "../../components/with-spinner/with-spinner.component";
+import "./shop.styles.scss";
+
+const CollectionOverviewWithSpinner = WithSpinner(CollectionOverview);
+const CollectionPageWithSpinner = WithSpinner(CollectionPage);
+
+const Shop = ({ match, addCollections }) => {
+  const unsubscribeFromSnapshot = null;
+
+  const [isLoading, setStateLoading] = useState(true);
+
+  useEffect(() => {
+    const collectionRef = firestore.collection("collections");
+
+    collectionRef.onSnapshot(async (snapshot) => {
+      const collections = convertCollectionsSnapshotToMap(snapshot);
+      addCollections(collections);
+      setStateLoading(false);
+    });
+  });
 
   return (
     <div className="shop-page">
-      {shopData.map(({ id, ...otherCollectionProps }) => (
-        <CollectionPreview key={id} {...otherCollectionProps} />
-      ))}
+      <Route
+        exact
+        path={`${match.path}`}
+        render={(props) => (
+          <CollectionOverviewWithSpinner isLoading={isLoading} {...props} />
+        )}
+      />
+      <Route
+        path={`${match.path}/:collectionId`}
+        render={(props) => (
+          <CollectionPageWithSpinner isLoading={isLoading} {...props} />
+        )}
+      />
     </div>
   );
 };
 
-export default Shop;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addCollections: (collections) => dispatch(addCollection(collections)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Shop);
