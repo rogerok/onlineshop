@@ -15,6 +15,7 @@ import SingInAndSignUp from "./pages/sing-in-and-sing-up/sing-in-and-sing-up.com
 import Shop from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 
+import background from "./img/background-image.jpg";
 import "./App.css";
 
 function App({ currentUser, setCurrentUser }) {
